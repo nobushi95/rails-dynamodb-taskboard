@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for(:title) || "TaskBoard - DynamoDB Tutorial" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f5f5f5; color: #333; }
+      nav { background: #1a1a2e; padding: 0 20px; display: flex; align-items: center; justify-content: space-between; height: 56px; }
+      nav a { color: #e0e0e0; text-decoration: none; padding: 8px 16px; border-radius: 4px; font-size: 14px; }
+      nav a:hover { background: rgba(255,255,255,0.1); }
+      nav a.active { background: #e94560; color: white; }
+      .nav-brand { font-size: 18px; font-weight: bold; color: white !important; }
+      .nav-links { display: flex; gap: 4px; align-items: center; }
+      .nav-section { display: flex; gap: 2px; background: rgba(255,255,255,0.05); border-radius: 6px; padding: 2px; }
+      .container { max-width: 960px; margin: 0 auto; padding: 24px; }
+      .flash { padding: 12px 16px; border-radius: 6px; margin-bottom: 16px; font-size: 14px; }
+      .flash-notice { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+      .flash-alert { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+      h1 { font-size: 24px; margin-bottom: 20px; color: #1a1a2e; }
+      h2 { font-size: 20px; margin-bottom: 16px; color: #1a1a2e; }
+      .card { background: white; border-radius: 8px; padding: 20px; margin-bottom: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+      .btn { display: inline-block; padding: 8px 16px; border-radius: 6px; text-decoration: none; font-size: 14px; border: none; cursor: pointer; font-weight: 500; }
+      .btn-primary { background: #e94560; color: white; }
+      .btn-primary:hover { background: #c23152; }
+      .btn-secondary { background: #eee; color: #333; }
+      .btn-secondary:hover { background: #ddd; }
+      .btn-sm { padding: 4px 10px; font-size: 12px; }
+      .btn-danger { background: #dc3545; color: white; }
+      .btn-danger:hover { background: #c82333; }
+      .form-group { margin-bottom: 16px; }
+      .form-group label { display: block; margin-bottom: 4px; font-weight: 500; font-size: 14px; }
+      .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 8px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; }
+      .form-group textarea { resize: vertical; min-height: 80px; }
+      table { width: 100%; border-collapse: collapse; }
+      th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid #eee; font-size: 14px; }
+      th { font-weight: 600; color: #666; font-size: 12px; text-transform: uppercase; }
+      .badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; text-transform: uppercase; }
+      .badge-todo { background: #fff3cd; color: #856404; }
+      .badge-in_progress { background: #cce5ff; color: #004085; }
+      .badge-done { background: #d4edda; color: #155724; }
+      .badge-high { background: #f8d7da; color: #721c24; }
+      .badge-medium { background: #fff3cd; color: #856404; }
+      .badge-low { background: #d1ecf1; color: #0c5460; }
+      .header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+      .dynamo-hint { background: #e8f4f8; border-left: 3px solid #17a2b8; padding: 8px 12px; font-size: 12px; color: #0c5460; margin-bottom: 16px; border-radius: 0 4px 4px 0; }
+      .task-actions { display: flex; gap: 4px; }
+    </style>
+  </head>
+
+  <body>
+    <nav>
+      <%= link_to "TaskBoard", root_path, class: "nav-brand" %>
+      <div class="nav-links">
+        <div class="nav-section">
+          <%= link_to "Todo", tasks_by_status_path("todo"), class: "#{request.path == tasks_by_status_path('todo') ? 'active' : ''}" %>
+          <%= link_to "In Progress", tasks_by_status_path("in_progress"), class: "#{request.path == tasks_by_status_path('in_progress') ? 'active' : ''}" %>
+          <%= link_to "Done", tasks_by_status_path("done"), class: "#{request.path == tasks_by_status_path('done') ? 'active' : ''}" %>
+        </div>
+        <%= link_to "Projects", projects_path %>
+        <%= link_to "Users", users_path %>
+      </div>
+    </nav>
+
+    <div class="container">
+      <% if notice %>
+        <div class="flash flash-notice"><%= notice %></div>
+      <% end %>
+      <% if alert %>
+        <div class="flash flash-alert"><%= alert %></div>
+      <% end %>
+
+      <%= yield %>
+    </div>
+  </body>
+</html>

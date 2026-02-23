@@ -1,0 +1,36 @@
+<div class="header-row">
+  <h1>Tasks: <%= @status.titleize %></h1>
+</div>
+
+<div class="dynamo-hint">
+  <strong>DynamoDB:</strong> Query GSI1 — gsi1pk = "STATUS#<%= @status %>" — <strong>Global Secondary Index</strong>でプロジェクト横断のステータス別一覧
+</div>
+
+<div class="card">
+  <table>
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Project</th>
+        <th>Priority</th>
+        <th>Due Date</th>
+        <th>Assignee</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @tasks.each do |task| %>
+        <tr>
+          <td><%= link_to task.title, project_path(task.project_id), style: "color: #e94560;" %></td>
+          <td><%= @projects[task.project_id]&.name || task.project_id %></td>
+          <td><span class="badge badge-<%= task.priority %>"><%= task.priority_label %></span></td>
+          <td><%= task.due_date %></td>
+          <td><%= @users[task.assignee_id]&.name || task.assignee_id %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <% if @tasks.empty? %>
+    <p style="text-align: center; color: #999; padding: 20px;">No tasks with status "<%= @status.titleize %>".</p>
+  <% end %>
+</div>

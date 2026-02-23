@@ -1,0 +1,25 @@
+services:
+  web:
+    build: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - bundle_cache:/usr/local/bundle
+    environment:
+      - DYNAMODB_ENDPOINT=http://dynamodb-local:8000
+    depends_on:
+      dynamodb-local:
+        condition: service_started
+    tty: true
+    stdin_open: true
+
+  dynamodb-local:
+    image: amazon/dynamodb-local:latest
+    ports:
+      - "8000:8000"
+    command: "-jar DynamoDBLocal.jar -sharedDb -inMemory"
+    working_dir: /home/dynamodblocal
+
+volumes:
+  bundle_cache:

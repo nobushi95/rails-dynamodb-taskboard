@@ -1,0 +1,36 @@
+<div class="header-row">
+  <h1>Tasks assigned to: <%= @user&.name || params[:user_id] %></h1>
+</div>
+
+<div class="dynamo-hint">
+  <strong>DynamoDB:</strong> Query GSI2 — gsi2pk = "ASSIGNEE#<%= params[:user_id] %>" — <strong>Global Secondary Index</strong>でプロジェクト横断の担当者別一覧
+</div>
+
+<div class="card">
+  <table>
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Project</th>
+        <th>Status</th>
+        <th>Priority</th>
+        <th>Due Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @tasks.each do |task| %>
+        <tr>
+          <td><%= link_to task.title, project_path(task.project_id), style: "color: #e94560;" %></td>
+          <td><%= @projects[task.project_id]&.name || task.project_id %></td>
+          <td><span class="badge badge-<%= task.status %>"><%= task.status_label %></span></td>
+          <td><span class="badge badge-<%= task.priority %>"><%= task.priority_label %></span></td>
+          <td><%= task.due_date %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <% if @tasks.empty? %>
+    <p style="text-align: center; color: #999; padding: 20px;">No tasks assigned to this user.</p>
+  <% end %>
+</div>

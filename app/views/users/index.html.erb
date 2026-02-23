@@ -1,0 +1,31 @@
+<div class="header-row">
+  <h1>Users</h1>
+  <%= link_to "New User", new_user_path, class: "btn btn-primary" %>
+</div>
+
+<div class="dynamo-hint">
+  <strong>DynamoDB:</strong> Scan + FilterExpression (entity_type = "User") — 全アイテムをスキャンしてUserのみフィルタリング
+</div>
+
+<div class="card">
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @users.each do |user| %>
+        <tr>
+          <td><%= user.name %></td>
+          <td><%= user.email %></td>
+          <td>
+            <%= link_to "Assigned Tasks", tasks_by_assignee_path(user.user_id), class: "btn btn-secondary btn-sm" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

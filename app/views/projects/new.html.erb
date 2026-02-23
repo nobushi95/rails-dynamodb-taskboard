@@ -1,0 +1,27 @@
+<h1>New Project</h1>
+
+<div class="card">
+  <%= form_with url: projects_path, method: :post, local: true do |f| %>
+    <div class="form-group">
+      <label for="name">Project Name</label>
+      <input type="text" name="name" id="name" required>
+    </div>
+    <div class="form-group">
+      <label for="description">Description</label>
+      <textarea name="description" id="description"></textarea>
+    </div>
+    <div class="form-group">
+      <label for="owner_id">Owner</label>
+      <select name="owner_id" id="owner_id" required>
+        <option value="">Select owner...</option>
+        <% @users.each do |user| %>
+          <option value="<%= user.user_id %>"><%= user.name %></option>
+        <% end %>
+      </select>
+    </div>
+    <div>
+      <%= submit_tag "Create Project", class: "btn btn-primary" %>
+      <%= link_to "Cancel", projects_path, class: "btn btn-secondary" %>
+    </div>
+  <% end %>
+</div>

@@ -1,0 +1,49 @@
+<div class="header-row">
+  <div>
+    <h1><%= @project.name %></h1>
+    <p style="color: #666; font-size: 14px;"><%= @project.description %></p>
+    <p style="color: #999; font-size: 12px;">Owner: <%= @users[@project.owner_id]&.name || @project.owner_id %></p>
+  </div>
+  <%= link_to "New Task", new_project_task_path(@project.project_id), class: "btn btn-primary" %>
+</div>
+
+<div class="dynamo-hint">
+  <strong>DynamoDB:</strong> Query PK=PROJECT#<%= @project.project_id %>, SK begins_with "TASK#" — <strong>Sort Keyによるソート</strong>で期限日順にタスクを取得
+</div>
+
+<div class="card">
+  <table>
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Status</th>
+        <th>Priority</th>
+        <th>Due Date</th>
+        <th>Assignee</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @tasks.each do |task| %>
+        <tr>
+          <td><%= task.title %></td>
+          <td><span class="badge badge-<%= task.status %>"><%= task.status_label %></span></td>
+          <td><span class="badge badge-<%= task.priority %>"><%= task.priority_label %></span></td>
+          <td><%= task.due_date %></td>
+          <td><%= @users[task.assignee_id]&.name || task.assignee_id %></td>
+          <td>
+            <div class="task-actions">
+              <%= button_to task.next_status.capitalize, cycle_status_project_task_path(@project.project_id, task.task_id), method: :patch, class: "btn btn-secondary btn-sm" %>
+              <%= link_to "Edit", edit_project_task_path(@project.project_id, task.task_id), class: "btn btn-secondary btn-sm" %>
+              <%= button_to "Delete", project_task_path(@project.project_id, task.task_id), method: :delete, class: "btn btn-danger btn-sm", data: { turbo_confirm: "Are you sure?" } %>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <% if @tasks.empty? %>
+    <p style="text-align: center; color: #999; padding: 20px;">No tasks yet. Add one to get started!</p>
+  <% end %>
+</div>

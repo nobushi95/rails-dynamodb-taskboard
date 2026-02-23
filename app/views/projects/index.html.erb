@@ -1,0 +1,27 @@
+<div class="header-row">
+  <h1>Projects</h1>
+  <%= link_to "New Project", new_project_path, class: "btn btn-primary" %>
+</div>
+
+<div class="dynamo-hint">
+  <strong>DynamoDB:</strong> Scan + FilterExpression (entity_type = "Project") — 全プロジェクトを取得
+</div>
+
+<% @projects.each do |project| %>
+  <div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <div>
+        <h2 style="margin-bottom: 4px;"><%= link_to project.name, project_path(project.project_id), style: "color: #1a1a2e; text-decoration: none;" %></h2>
+        <p style="color: #666; font-size: 14px; margin-bottom: 4px;"><%= project.description %></p>
+        <p style="color: #999; font-size: 12px;">Owner: <%= @users[project.owner_id]&.name || project.owner_id %></p>
+      </div>
+      <%= link_to "View →", project_path(project.project_id), class: "btn btn-secondary" %>
+    </div>
+  </div>
+<% end %>
+
+<% if @projects.empty? %>
+  <div class="card" style="text-align: center; color: #999;">
+    No projects yet. Create one to get started!
+  </div>
+<% end %>

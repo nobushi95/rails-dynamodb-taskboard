@@ -1,4 +1,4 @@
-FROM ruby:3.3.10-slim
+FROM ruby:3.3.13-slim
 
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y build-essential curl libyaml-dev && \

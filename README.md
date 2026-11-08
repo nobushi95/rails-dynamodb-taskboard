@@ -49,7 +49,7 @@ docker compose exec web bundle exec rake dynamodb:seed
 
 ## 技術スタック
 
-- Ruby 3.3.10 / Rails 7.2
+- Ruby 3.3.13 / Rails 7.2
 - aws-record + aws-sdk-dynamodb
 - Hotwire (Turbo + Stimulus) / Importmap
 - Docker + docker-compose + DynamoDB Local
